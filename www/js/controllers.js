@@ -18,3 +18,18 @@ angular.module('starter.controllers', [])
     { title: 'Yaourts nature', id: 2, checked: false },
   ];
 })
+
+
+.controller('HomeCtrl', function($scope) {
+  //Social Sharing
+  $scope.shareOptions = [
+    { message: "J'ai réduit mes déchets de 12 kg grâce à ma poubelle intelligente!", subject: "-12kg de déchets", url: "http://greenti.bzh/" },
+    { message: "J'ai recyclé assez de métal pour créer un vélo. génial non?", subject: "Mon premier vélo", url: "http://greenti.bzh/" },
+  ];
+
+  $scope.share = function(btnId) {
+    $cordovaSocialSharing.share($scope.shareOptions[btnId].message, $scope.shareOptions[btnId].subject, null, $scope.shareOptions[btnId].url);
+  }
+
+
+})
