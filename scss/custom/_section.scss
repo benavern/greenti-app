@@ -1,0 +1,58 @@
+// finalement y avait les cards http://ionicframework.com/docs/components/#cards
+
+// ion-content{
+//     background-color: $stable;
+
+//     section {
+//         margin: .5rem;
+//         padding: .5em;
+//         box-shadow: 0rem .1rem .3rem rgba(black, .3);
+//         border-radius: .2rem;
+//         background: $light;
+//         overflow: hidden;
+
+//         header{
+//             overflow: hidden;
+//             max-height: 150px;
+//             margin: -.5rem -.5rem .5rem;
+
+//             img{
+//                 display: block;
+//                 min-width: 100%;
+//                 height: auto;
+                
+
+//             }
+//         }
+
+//         & > h3,
+//         & > p,
+//         & > .cta{
+//             padding: .3em 0  ;
+//             margin: 0;
+
+//         }
+
+//         h3{
+//             color: $pink;
+
+//             i.icon{
+//                 margin-right: .3rem;
+
+//             }
+//         }
+
+//         .cta{
+//             font-variant: small-caps;
+//         }
+
+//         &.bg-green{
+//             color: $light;
+//             background-color: $balanced;
+//             h3{ 
+//                 color: $stable;
+
+//             }
+//         }
+//     }
+// }

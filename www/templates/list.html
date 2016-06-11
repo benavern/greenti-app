@@ -1,0 +1,10 @@
+<ion-view view-title="Ma liste de courses">
+  <ion-content>
+
+    <ion-list>
+        <ion-checkbox ng-repeat="item in list" ng-model="item.checked">{{item.title}}</ion-checkbox>
+    </ion-list>
+  
+  
+  </ion-content>
+</ion-view>
