@@ -1,9 +1,16 @@
 <ion-view view-title="Ma liste de courses">
   <ion-content>
 
+    <ion-refresher
+      pulling-text="Rafraichir ..."
+      on-refresh="refresh()">
+    </ion-refresher>
+
     <ion-list>
 
-        <ion-checkbox class="checkbox-royal" ng-repeat="item in list" ng-model="item.checked">
+        <ion-item class="text-center" ng-show="listLoading"><ion-spinner class="spinner-royal" icon="lines"></ion-spinner></ion-item>
+
+        <ion-checkbox class="checkbox-royal" ng-repeat="item in list track by $index" ng-model="item.checked">
           <h2 class="royal">{{item.title}}</h2>
           <p class="item-note">{{item.code}}</p>
         </ion-checkbox>

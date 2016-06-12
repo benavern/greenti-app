@@ -23,20 +23,17 @@
     <div class="list card">
       <div class="item item-text-wrap item-icon-left assertive">
         <i class="icon ion-android-cart"></i>
-        Ajoutés aux courses
+        Ajoutés récemment
       </div>
-      <div class="item item-text-wrap item-icon-left">
+
+      <ion-item class="text-center" ng-show="listLoading"><ion-spinner class="spinner-royal" icon="lines"></ion-spinner></ion-item>
+
+
+      <div class="item item-text-wrap item-icon-left" ng-repeat="item in list track by $index | limitTo: 1">
         <i class="icon ion-ios-checkmark-empty"></i>
-        truc
+        {{item.title}}
       </div>
-      <div class="item item-text-wrap item-icon-left">
-        <i class="icon ion-ios-checkmark-empty"></i>
-        machin
-      </div>
-      <div class="item item-text-wrap item-icon-left">
-        <i class="icon ion-ios-checkmark-empty"></i>
-        chose
-      </div>
+      
       <a href="#/app/list" class="item item-divider item-icon-right">
         Voir la liste complete...
         <i class="icon ion-arrow-right-c"></i>

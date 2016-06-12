@@ -1,10 +1,10 @@
-angular.module('starter.controllers', [])
+angular.module('starter.controllers', ['starter.services'])
 
 
 /**
  * HOME ctrl
  */
-.controller('HomeCtrl', function($scope, $ionicActionSheet, $ionicPopup) {
+.controller('HomeCtrl', function($scope, $ionicActionSheet, $ionicPopup, shoppingListFactory) {
   //Social Sharing
   $scope.shareOptions = [
     { template: "J'ai réduit mes déchets de 12 kg grâce à ma poubelle intelligente!", title: "-12kg de déchets" },
@@ -36,6 +36,15 @@ angular.module('starter.controllers', [])
 
  };
 
+ //list of items
+  $scope.list = []
+  $scope.listLoading = true
+  shoppingListFactory.fetch().then(function(data) { // fetch and get new value
+    $scope.list = shoppingListFactory.get()
+    $scope.listLoading = false;
+    
+  })
+
 })
 
 
@@ -45,12 +54,20 @@ angular.module('starter.controllers', [])
 /**
  * LIST ctrl
  */
-.controller('ListCtrl', function($scope) {
+.controller('ListCtrl', function($scope, shoppingListFactory ) {
+
+  $scope.listLoading = true;
+
   //list of items
-  $scope.list = [
-    { title: 'Cristaline', code: "854653468463505", checked: true },
-    { title: 'Yaourts nature', code: "654084354168740", checked: false },
-  ];
+  $scope.list = []
+  $scope.refresh = function(){
+    shoppingListFactory.fetch().then(function(data) { // fetch and get new value
+      $scope.list = shoppingListFactory.get()
+      $scope.listLoading = false;
+      $scope.$broadcast('scroll.refreshComplete');
+    })
+  }
+  $scope.refresh();
 
 })
 
