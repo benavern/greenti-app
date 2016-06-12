@@ -1,4 +1,4 @@
-angular.module('starter.controllers', ['starter.services'])
+angular.module('starter.controllers', ['starter.services', 'ionic'])
 
 
 /**
@@ -29,7 +29,7 @@ angular.module('starter.controllers', ['starter.services'])
         console.log('CANCELLED');
       },
      buttonClicked: function(i) {
-       $scope.showAlert(x)
+       $scope.showAlert(x);
        return true;
      }
    });
@@ -54,20 +54,58 @@ angular.module('starter.controllers', ['starter.services'])
 /**
  * LIST ctrl
  */
-.controller('ListCtrl', function($scope, shoppingListFactory ) {
-
-  $scope.listLoading = true;
+.controller('ListCtrl', function($scope, $ionicModal, shoppingListFactory ) {
+  // default delete hidden.
+  $scope.isDeleteActive = false;
 
   //list of items
-  $scope.list = []
+  $scope.list = [];
+  $scope.listLoading = true;
   $scope.refresh = function(){
     shoppingListFactory.fetch().then(function(data) { // fetch and get new value
-      $scope.list = shoppingListFactory.get()
+      $scope.list = shoppingListFactory.get();
       $scope.listLoading = false;
       $scope.$broadcast('scroll.refreshComplete');
     })
   }
   $scope.refresh();
 
+  $scope.delete = function(index){
+    $scope.list.splice(index, 1);
+  }
+
+
+  $ionicModal.fromTemplateUrl('templates/modal.html', {
+    scope: $scope,
+    animation: 'slide-in-up'
+  }).then(function(modal) {
+    $scope.modal = modal;
+  });
+  $scope.openModal = function() {
+    $scope.modal.show();
+  };
+  $scope.closeModal = function() {
+    $scope.modal.hide();
+  };
+  // Cleanup the modal when we're done with it!
+  $scope.$on('$destroy', function() {
+    $scope.modal.remove();
+  });
+  // Execute action on hide modal
+  $scope.$on('modal.hidden', function() {
+    // Execute action
+  });
+  // Execute action on remove modal
+  $scope.$on('modal.removed', function() {
+    // Execute action
+  });
+
+  $scope.createItem = function(newItem) {
+    $scope.list.push(newItem);
+    $scope.closeModal();
+    $scope.newItem = {};
+
+  }
+  
 })
 

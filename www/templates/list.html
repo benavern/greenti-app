@@ -6,17 +6,53 @@
       on-refresh="refresh()">
     </ion-refresher>
 
-    <ion-list>
+    <ion-list show-delete="isDeleteActive">
 
         <ion-item class="text-center" ng-show="listLoading"><ion-spinner class="spinner-royal" icon="lines"></ion-spinner></ion-item>
-
-        <ion-checkbox class="checkbox-royal" ng-repeat="item in list track by $index" ng-model="item.checked">
-          <h2 class="royal">{{item.title}}</h2>
-          <p class="item-note">{{item.code}}</p>
-        </ion-checkbox>
+        
+        <ion-item class="checkbox-royal" ng-repeat="item in list track by $index">
+          <ion-delete-button class="ion-minus-circled" ng-click="delete($fromIndex)"></ion-delete-button>
+          <!--<input type="checkbox" class="checkbox checkbox-square" ng-model="item.checked" ng-disabled="isDeleteActive">-->
+          <h2 class="royal">{{::item.title + " :  " + $index}}</h2>
+          <p class="item-note">{{::item.code || "ajout manuel"}}</p>
+          
+        </ion-item>
 
     </ion-list>
   
-  
   </ion-content>
+
+    <script id="templates/modal.html" type="text/ng-template">
+      <ion-modal-view>
+        <ion-header-bar class="bar bar-header bar-balanced">
+          <h1 class="title">New Contact</h1>
+          <button class="button button-clear button-primary" ng-click="modal.hide()">Cancel</button>
+        </ion-header-bar>
+        <ion-content class="padding">
+          <div class="list">
+            <label class="item item-input">
+              <span class="input-label">Nom de l'article</span>
+              <input ng-model="newItem.title" type="text">
+            </label>
+            <label class="item item-input">
+              <span class="input-label">Code barre</span>
+              <input ng-model="newItem.code" type="tel">
+            </label>
+            <button class="button button-full button-balanced" ng-click="newItem.checked = false; createItem(newItem)">Create</button>
+          </div>
+        </ion-content>
+      </ion-modal-view>
+    </script>
+
+  <ion-footer-bar class="bar-balanced">
+    
+    <div class="buttons">
+      <button class="button" ng-click="isDeleteActive = false; openModal()">Ajouter</button>
+    </div>
+    <h1 class="title"></h1>
+    <div class="buttons">
+      <button class="button" ng-click="isDeleteActive = !isDeleteActive">{{isDeleteActive ? 'Terminer' : 'Supprimer'}}</button>
+    </div>
+  </ion-footer-bar>
+
 </ion-view>

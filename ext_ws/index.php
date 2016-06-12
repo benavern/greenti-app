@@ -1,5 +1,6 @@
 <?php
-
+    header('Access-Control-Allow-Origin: *', false);
+    
     if( isset($_GET['list']) ) {
         $data = [
             [ 'title' => 'Cristaline', 'code' => "854653468463505", 'checked' => true ],
@@ -15,7 +16,6 @@
 
 
     function forTheApp($data) {
-        header('Access-Control-Allow-Origin: *', false);  
         header('Content-Type: application/json');
         echo json_encode($data);
         exit(0);
