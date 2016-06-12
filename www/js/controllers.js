@@ -1,35 +1,56 @@
 angular.module('starter.controllers', [])
 
-// .controller('AppCtrl', function($scope, $ionicModal, $timeout) {
 
-//   // With the new view caching in Ionic, Controllers are only called
-//   // when they are recreated or on app start, instead of every page change.
-//   // To listen for when this page is active (for example, to refresh data),
-//   // listen for the $ionicView.enter event:
-//   //$scope.$on('$ionicView.enter', function(e) {
-//   //});
+/**
+ * HOME ctrl
+ */
+.controller('HomeCtrl', function($scope, $ionicActionSheet, $ionicPopup) {
+  //Social Sharing
+  $scope.shareOptions = [
+    { template: "J'ai réduit mes déchets de 12 kg grâce à ma poubelle intelligente!", title: "-12kg de déchets" },
+    { template: "J'ai recyclé assez de métal pour créer un vélo. génial non?", title: "Mon premier vélo"},
+  ];
 
-// })
 
+  //fake shared success ...
+  $scope.showAlert = function(y) {
+    var alertPopup = $ionicPopup.alert($scope.shareOptions[y]);
+  };
+
+ $scope.shareBtn = function(x) {
+   $ionicActionSheet.show({
+     titleText: 'Partager via...' ,
+     buttons: [
+        { text: '<i class="icon ion-social-facebook positive"></i> Facebook'},
+        { text: '<i class="icon ion-social-twitter calm"></i> Twitter' },
+      ],
+     cancelText: 'Annuler',
+     cancel: function() {
+        console.log('CANCELLED');
+      },
+     buttonClicked: function(i) {
+       $scope.showAlert(x)
+       return true;
+     }
+   });
+
+ };
+
+})
+
+
+
+
+
+/**
+ * LIST ctrl
+ */
 .controller('ListCtrl', function($scope) {
   //list of items
   $scope.list = [
-    { title: 'Cristaline', id: 1, checked: true },
-    { title: 'Yaourts nature', id: 2, checked: false },
-  ];
-})
-
-
-.controller('HomeCtrl', function($scope) {
-  //Social Sharing
-  $scope.shareOptions = [
-    { message: "J'ai réduit mes déchets de 12 kg grâce à ma poubelle intelligente!", subject: "-12kg de déchets", url: "http://greenti.bzh/" },
-    { message: "J'ai recyclé assez de métal pour créer un vélo. génial non?", subject: "Mon premier vélo", url: "http://greenti.bzh/" },
+    { title: 'Cristaline', code: "854653468463505", checked: true },
+    { title: 'Yaourts nature', code: "654084354168740", checked: false },
   ];
 
-  $scope.share = function(btnId) {
-    $cordovaSocialSharing.share($scope.shareOptions[btnId].message, $scope.shareOptions[btnId].subject, null, $scope.shareOptions[btnId].url);
-  }
-
-
 })
+

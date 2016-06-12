@@ -2,7 +2,12 @@
   <ion-content>
 
     <ion-list>
-        <ion-checkbox ng-repeat="item in list" ng-model="item.checked">{{item.title}}</ion-checkbox>
+
+        <ion-checkbox class="checkbox-royal" ng-repeat="item in list" ng-model="item.checked">
+          <h2 class="royal">{{item.title}}</h2>
+          <p class="item-note">{{item.code}}</p>
+        </ion-checkbox>
+
     </ion-list>
   
   
