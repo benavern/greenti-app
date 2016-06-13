@@ -10,11 +10,12 @@
 
         <ion-item class="text-center" ng-show="listLoading"><ion-spinner class="spinner-royal" icon="lines"></ion-spinner></ion-item>
         
-        <ion-item class="checkbox-royal" ng-repeat="item in list track by $index">
-          <ion-delete-button class="ion-minus-circled" ng-click="delete($fromIndex)"></ion-delete-button>
+        <ion-item class="checkbox-royal item-icon-left" ng-repeat="item in list" ng-click="toggleCheck($index)">
+          <ion-delete-button class="ion-minus-circled" ng-click="delete($index)"></ion-delete-button>
           <!--<input type="checkbox" class="checkbox checkbox-square" ng-model="item.checked" ng-disabled="isDeleteActive">-->
-          <h2 class="royal">{{::item.title + " :  " + $index}}</h2>
-          <p class="item-note">{{::item.code || "ajout manuel"}}</p>
+          <i class="icon ion-checkmark-circled royal" ng-show="item.checked"></i>
+          <h2 class="royal">{{::item.title}}</h2>
+          <p class="item-note">{{::item.code}}</p>
           
         </ion-item>
 

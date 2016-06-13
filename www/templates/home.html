@@ -29,9 +29,9 @@
       <ion-item class="text-center" ng-show="listLoading"><ion-spinner class="spinner-royal" icon="lines"></ion-spinner></ion-item>
 
 
-      <div class="item item-text-wrap item-icon-left" ng-repeat="item in list track by $index | limitTo: 1">
-        <i class="icon ion-ios-checkmark-empty"></i>
-        {{item.title}}
+      <div class="item item-text-wrap item-icon-left" ng-repeat="item in list | limitTo: 3">
+        <i class="icon ion-ios-checkmark-empty" ng-show="item.checked"></i>
+        {{::item.title}}
       </div>
       
       <a href="#/app/list" class="item item-divider item-icon-right">

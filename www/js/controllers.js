@@ -39,11 +39,16 @@ angular.module('starter.controllers', ['starter.services', 'ionic'])
  //list of items
   $scope.list = []
   $scope.listLoading = true
-  shoppingListFactory.fetch().then(function(data) { // fetch and get new value
+  
+  $scope.$on("$ionicView.enter", function(event, data){
+   // handle event
+   shoppingListFactory.fetch().then(function(data) { // fetch and get new value
     $scope.list = shoppingListFactory.get()
     $scope.listLoading = false;
     
   })
+});
+
 
 })
 
@@ -72,6 +77,8 @@ angular.module('starter.controllers', ['starter.services', 'ionic'])
 
   $scope.delete = function(index){
     $scope.list.splice(index, 1);
+    shoppingListFactory.update($scope.list);
+    
   }
 
 
@@ -82,6 +89,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic'])
     $scope.modal = modal;
   });
   $scope.openModal = function() {
+    $scope.newItem = {};
     $scope.modal.show();
   };
   $scope.closeModal = function() {
@@ -91,21 +99,22 @@ angular.module('starter.controllers', ['starter.services', 'ionic'])
   $scope.$on('$destroy', function() {
     $scope.modal.remove();
   });
-  // Execute action on hide modal
-  $scope.$on('modal.hidden', function() {
-    // Execute action
-  });
-  // Execute action on remove modal
-  $scope.$on('modal.removed', function() {
-    // Execute action
-  });
 
   $scope.createItem = function(newItem) {
     $scope.list.push(newItem);
+    shoppingListFactory.update($scope.list).then(function(data){
+      $scope.list = data;
+    });
     $scope.closeModal();
-    $scope.newItem = {};
 
   }
+
+   $scope.toggleCheck = function(index) {
+     $scope.list[index].checked = !$scope.list[index].checked;
+     shoppingListFactory.update($scope.list).then(function(data){
+      $scope.list = data;
+    });
+   }
   
 })
 
