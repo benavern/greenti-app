@@ -37,11 +37,12 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'chart.js'])
 
 
  $scope.chart= {
-   labels : ["January", "February", "March", "April", "May", "June", "July"],
-   series : ['Series A', 'Series B'],
+   labels : ["Janv", "", "", "Avr", "", "", "Juil"],
+   series : ['Cuisine', 'Garage'],
+   colours : ['#83bf3f', '#cccccc'],
    data : [
-        [65, 59, 80, 81, 56, 55, 40],
-        [28, 48, 40, 19, 86, 27, 90]
+        [6.5, 5.9, 8.0, 8.1, 5.6, 5.5, 4.0],
+        [2.8, 4.8, 4.0, 1.9, 8.6, 2.7, 9.0]
     ]
  }
 
