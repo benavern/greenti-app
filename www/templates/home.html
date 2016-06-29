@@ -29,7 +29,7 @@
       <ion-item class="text-center" ng-show="listLoading"><ion-spinner class="spinner-royal" icon="lines"></ion-spinner></ion-item>
 
 
-      <div class="item item-text-wrap item-icon-left" ng-repeat="item in list | limitTo: 3">
+      <div class="item item-text-wrap item-icon-left" ng-repeat="item in shoppingList.list | limitTo: 3">
         <i class="icon ion-ios-checkmark-empty" ng-show="item.checked"></i>
         {{::item.title}}
       </div>
@@ -38,6 +38,16 @@
         Voir la liste complete...
         <i class="icon ion-arrow-right-c"></i>
       </a>
+    </div>
+
+    <div class="list card">
+      <div class="item item-text-wrap item-icon-left assertive">
+        <i class="icon ion-chart"></i>
+        Statistiques
+      </div>
+      <div class="item item-text-wrap">
+        <canvas id="line" class="chart chart-line" data="chart.data" labels="chart.labels" legend="true" series="chart.series" options="{showTooltips: false}"></canvas>
+      </div>
     </div>
 
     <div class="list card ">

@@ -10,7 +10,7 @@
 
         <ion-item class="text-center" ng-show="listLoading"><ion-spinner class="spinner-royal" icon="lines"></ion-spinner></ion-item>
         
-        <ion-item class="checkbox-royal item-icon-left" ng-repeat="item in list" ng-click="toggleCheck($index)">
+        <ion-item class="checkbox-royal item-icon-left" ng-repeat="item in shoppingList.list" ng-click="toggleCheck($index)">
           <ion-delete-button class="ion-minus-circled" ng-click="delete($index)"></ion-delete-button>
           <!--<input type="checkbox" class="checkbox checkbox-square" ng-model="item.checked" ng-disabled="isDeleteActive">-->
           <i class="icon ion-checkmark-circled royal" ng-show="item.checked"></i>
@@ -39,7 +39,7 @@
               <span class="input-label">Code barre</span>
               <input ng-model="newItem.code" type="tel">
             </label>
-            <button class="button button-full button-balanced" ng-click="newItem.checked = false; createItem(newItem)">Create</button>
+            <button class="button button-full button-balanced" ng-click="newItem.checked = false; add(newItem)">Create</button>
           </div>
         </ion-content>
       </ion-modal-view>
@@ -48,7 +48,7 @@
   <ion-footer-bar class="bar-balanced">
     
     <div class="buttons">
-      <button class="button" ng-click="isDeleteActive = false; openModal()">Ajouter</button>
+      <button class="button" ng-click="openModal()">Ajouter</button>
     </div>
     <h1 class="title"></h1>
     <div class="buttons">

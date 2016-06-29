@@ -1,4 +1,4 @@
-angular.module('starter.controllers', ['starter.services', 'ionic'])
+angular.module('starter.controllers', ['starter.services', 'ionic', 'chart.js'])
 
 
 /**
@@ -10,7 +10,6 @@ angular.module('starter.controllers', ['starter.services', 'ionic'])
     { template: "J'ai réduit mes déchets de 12 kg grâce à ma poubelle intelligente!", title: "-12kg de déchets" },
     { template: "J'ai recyclé assez de métal pour créer un vélo. génial non?", title: "Mon premier vélo"},
   ];
-
 
   //fake shared success ...
   $scope.showAlert = function(y) {
@@ -36,18 +35,32 @@ angular.module('starter.controllers', ['starter.services', 'ionic'])
 
  };
 
+
+ $scope.chart= {
+   labels : ["January", "February", "March", "April", "May", "June", "July"],
+   series : ['Series A', 'Series B'],
+   data : [
+        [65, 59, 80, 81, 56, 55, 40],
+        [28, 48, 40, 19, 86, 27, 90]
+    ]
+ }
+
+
+
+
+
  //list of items
-  $scope.list = []
+  $scope.shoppingList = shoppingListFactory;
   $scope.listLoading = true
   
   $scope.$on("$ionicView.enter", function(event, data){
-   // handle event
-   shoppingListFactory.fetch().then(function(data) { // fetch and get new value
-    $scope.list = shoppingListFactory.get()
-    $scope.listLoading = false;
-    
-  })
-});
+    // handle event
+    $scope.shoppingList.fetch()
+      .then(function(data) { // fetch and get new value
+        $scope.listLoading = false;
+        
+      })
+  });
 
 
 })
@@ -64,24 +77,60 @@ angular.module('starter.controllers', ['starter.services', 'ionic'])
   $scope.isDeleteActive = false;
 
   //list of items
-  $scope.list = [];
+  $scope.shoppingList = shoppingListFactory;
   $scope.listLoading = true;
+
+
+  /**
+   * Refresh method that will be called on pull to refresh & on view enter.
+   */
   $scope.refresh = function(){
-    shoppingListFactory.fetch().then(function(data) { // fetch and get new value
-      $scope.list = shoppingListFactory.get();
-      $scope.listLoading = false;
-      $scope.$broadcast('scroll.refreshComplete');
-    })
+    $scope.shoppingList.fetch()
+      .then(function(data) {
+        $scope.listLoading = false; // loader hide
+        $scope.$broadcast('scroll.refreshComplete'); // pull to refresh OK
+      })
+
   }
-  $scope.refresh();
+
+
 
   $scope.delete = function(index){
-    $scope.list.splice(index, 1);
-    shoppingListFactory.update($scope.list);
+    $scope.shoppingList.list.splice(index, 1);
+    $scope.listLoading = true;
+    $scope.shoppingList.update($scope.shoppingList.list).then(function(data){
+      $scope.shoppingList.list = data;
+      $scope.listLoading = false;
+    });
     
   }
 
+  
+  $scope.add = function(newItem) {
+    $scope.shoppingList.list.push(newItem);
+    $scope.listLoading = true;
+    $scope.shoppingList.update($scope.shoppingList.list).then(function(data){
+      $scope.shoppingList.list = data;
+      $scope.listLoading = false;
+    });
+    $scope.closeModal();
 
+  }
+
+  
+   $scope.toggleCheck = function(index) {
+     $scope.shoppingList.list[index].checked = !$scope.shoppingList.list[index].checked;
+     $scope.listLoading = true;     
+     $scope.shoppingList.update($scope.shoppingList.list).then(function(data){
+      $scope.shoppingList.list = data;
+      $scope.listLoading = false;
+      
+    });
+   }
+
+
+
+  // modal 
   $ionicModal.fromTemplateUrl('templates/modal.html', {
     scope: $scope,
     animation: 'slide-in-up'
@@ -95,26 +144,19 @@ angular.module('starter.controllers', ['starter.services', 'ionic'])
   $scope.closeModal = function() {
     $scope.modal.hide();
   };
-  // Cleanup the modal when we're done with it!
   $scope.$on('$destroy', function() {
     $scope.modal.remove();
   });
 
-  $scope.createItem = function(newItem) {
-    $scope.list.push(newItem);
-    shoppingListFactory.update($scope.list).then(function(data){
-      $scope.list = data;
-    });
-    $scope.closeModal();
 
-  }
-
-   $scope.toggleCheck = function(index) {
-     $scope.list[index].checked = !$scope.list[index].checked;
-     shoppingListFactory.update($scope.list).then(function(data){
-      $scope.list = data;
-    });
-   }
+  
+   /**
+    * On view enter, refresh shoppinglist data
+    */
+   $scope.$on("$ionicView.enter", function(event, data){
+    $scope.refresh();
+   
+  });
   
 })
 
