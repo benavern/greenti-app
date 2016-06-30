@@ -4,7 +4,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'chart.js'])
 /**
  * HOME ctrl
  */
-.controller('HomeCtrl', function($scope, $ionicActionSheet, $ionicPopup, shoppingListFactory) {
+.controller('HomeCtrl', function($scope, $ionicActionSheet, $ionicPopup, shoppingListFactory, $cordovaSocialSharing) {
   //Social Sharing
   $scope.shareOptions = [
     { template: "J'ai réduit mes déchets de 12 kg grâce à ma poubelle intelligente!", title: "-12kg de déchets" },
@@ -13,7 +13,13 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'chart.js'])
 
   //fake shared success ...
   $scope.showAlert = function(y) {
-    var alertPopup = $ionicPopup.alert($scope.shareOptions[y]);
+    // var alertPopup = $ionicPopup.alert($scope.shareOptions[y]);
+    $cordovaSocialSharing.share(
+      $scope.shareOptions[y].template, //message
+      $scope.shareOptions[y].title, //subject
+      null, //file
+      "http://greenti.bzh/" //link
+    )
   };
 
  $scope.shareBtn = function(x) {
