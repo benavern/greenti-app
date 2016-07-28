@@ -50,19 +50,26 @@ class Router {
 
         // method exception
         if( !isset( $this->routes[$method] ) ) {
-            error("Request method does not exist.");
+            $this->error("Request method does not exist.");
             //throw new \Exception('Request method does not exist.');
         }
 
         // route exception
         if( !isset($this->routes[$method][$url]) ){
             // throw new \exception('No route');
-            error("No route found for this route (". $url .")");
+            $this->error("No route found for this url (". $url .")");
         }
 
         $this->routes[$method][$url]($options);
         
     }//function
+
+    public function error($message = "unknown error"){        
+        header("HTTP/1.0 500 Internal Server Error");
+        header('Content-Type: application/json');
+        echo json_encode(["error" => $message]);
+        exit(0);
+    }
 
 }//class
 
@@ -73,80 +80,134 @@ class Router {
 
 $router = new Router;
 
+// welcome
 $router->get('/', function() {
     output([
-        'method' => 'GET',
-        'data' => 'you are on the / route'
+        'data' => 'Hi, you are on the greenti API !'
     ]);
 });
 
-$router->get('/truc', function($options) {
-    output([
-        'method' => 'GET',
-        'data' => $options
-    ]);
+
+
+
+/* ===============
+*   shopping cart
+*  =============== */
+
+// list of items in the cart
+// if param item => return the item
+$router->get('/cart', function($options) {
+    $data = getListContent($options['GET']['item']);
+
+    output($data);
 });
 
-$router->post('/chose', function($options) {
-    output([
-        'method' => 'POST',
-        'data' => $options 
-    ]);
+
+// add an item in the cart list
+$router->post('/cart/add', function($options) {
+
+    $toAdd = [];
+    $data = $options['POST'];
+
+    if(!empty($data['title']) && !empty($data['code'])){
+        $toAdd['title'] = $data['title'];
+        $toAdd['code'] = $data['code'];
+        $toAdd['checked'] = ($data['checked'] == true) ? true : false;
+
+        output(addListContent($toAdd));
+    }
+    else{
+        error("The item you're trying to add is not valid");
+    }
+
 });
 
+// remove an item from the cart list
+$router->post('/cart/delete', function($options) {
+
+    $toDelete = $options['POST'];
+
+    if(!empty($toDelete['item'])){
+        output(deleteListContent($toDelete['item']));
+    }
+    else{
+        error("You must pass the item's index to be delete it.");
+    }
+});
+
+
+
+
+/* ==================
+*   start the router
+*  ================== */
 $router->run();
 
 
 
-    // $listPath = './list.json';
 
-    // if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+/**
+* =========================== Utils =============================
+*/
+
+function getListContent($index = NULL) {
+    $listPath = './list.json';
+    $list = json_decode(file_get_contents($listPath), true);
+
+    if($index == NULL) return $list;
+    elseif(isset($list[intVal($index)])) return $list[intVal($index)];
+    else error("The item you requested doesn't exist");
+}
+
+
+function addListContent($toAdd = NULL){
+    if($toAdd == NULL) error("You must pass the item's data to add it.");
+
+    $data = getListContent();
+
+    $data[] = $toAdd;
+
+    writeFile(json_encode($data));
+
+    return $data;
+
+}
+
+function deleteListContent($index = NULL) {
+    if($index == NULL) error("You must pass the item's index to be delete it.");
+
+    $data = getListContent();
+
+    if(!isset($data[intVal($index)])) error("The item you want to delete does not exist");
+    unset($data[intVal($index)]);
     
-    //     if( isset($_GET['list']) ) {
-    //         $data = json_decode(file_get_contents($listPath), true);
-    //         forTheApp($data);
+    writeFile(json_encode($data));
+    
+    return $data;
 
-    //     }
-    //     else{
-    //         error("no data...");
-
-    //     }
-
-    // }
-    // elseif($_SERVER['REQUEST_METHOD'] == 'POST'){
-    //     $jsonData =  file_get_contents("php://input");
-    //     $data =  json_decode($jsonData);
-        
-    //     if( !empty($data) ) {
-
-    //         $myfile = fopen($listPath, "w") or error("file open impossible");
-    //         fwrite($myfile, $jsonData);
-    //         fclose($myfile);
-
-    //         forTheApp($data);
-
-    //     }
-    //     else {
-    //         error("no data ...");
-    //     }
-
-    // } 
-    // else {
-    //     error("method error");
-
-    // }
+}
 
 
-    function output($data) {
-        header('Content-Type: application/json');
-        echo json_encode($data);
-        exit(0);
-    }
 
-    function error($message = "unknown error"){        
-        // header("HTTP/1.0 500 Internal Server Error");
-        header('Content-Type: application/json');
-        echo json_encode(["error" => $message]);
-        exit(0);
-    }
 
+
+function output($data = []) {
+    header('Content-Type: application/json');
+    echo json_encode($data);
+    exit(0);
+}
+
+function error($message = "unknown error"){        
+    header("HTTP/1.0 500 Internal Server Error");
+    header('Content-Type: application/json');
+    echo json_encode(["error" => $message]);
+    exit(0);
+}
+
+function writeFile($data = "") {
+    $listPath = './list.json';
+    $myfile = fopen($listPath, "w") or error("Error while writing in the file...");
+    fwrite($myfile, $data);
+    fclose($myfile);
+    return $data;
+}
