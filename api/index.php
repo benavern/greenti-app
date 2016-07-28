@@ -44,7 +44,7 @@ class Router {
         $url = $this->url;
         $options = [
             'GET' => $_GET,
-            'POST' => $_POST
+            'POST' => json_decode(file_get_contents("php://input"), true)//$_POST
         ];
         unset($options['GET']['z_router_url']);
 
@@ -135,6 +135,25 @@ $router->post('/cart/delete', function($options) {
     }
 });
 
+// remove an item from the cart list
+$router->post('/cart/update', function($options) {
+
+    $toUpdate = [];
+    $data = $options['POST'];
+    $index = $options['GET']['item'];
+
+    if(!empty($data['title']) && !empty($data['code']) && !empty($index)){
+        $toUpdate['title'] = $data['title'];
+        $toUpdate['code'] = $data['code'];
+        $toUpdate['checked'] = ($data['checked'] == true) ? true : false;
+
+        output(updateListContent($index, $toUpdate));
+    }
+    else{
+        error("The item you're trying to update is not valid");
+    }
+});
+
 
 
 
@@ -180,11 +199,28 @@ function deleteListContent($index = NULL) {
 
     if(!isset($data[intVal($index)])) error("The item you want to delete does not exist");
     unset($data[intVal($index)]);
-    
+
     writeFile(json_encode($data));
     
     return $data;
 
+}
+
+function updateListContent($index = NULL, $toUpdate = NULL){
+    if($toUpdate == NULL) error("You must pass the item's data to update it.");
+    if($index == NULL) error("You must pass the item's index to update it.");
+
+    $data = getListContent();
+
+    if(!isset($data[intVal($index)])) error("The item you want to update does not exist");
+
+    $data = getListContent();
+
+    $data[intVal($index)] = $toUpdate;
+
+    writeFile(json_encode($data));
+
+    return $data;
 }
 
 

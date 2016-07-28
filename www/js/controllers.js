@@ -103,36 +103,49 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'chart.js'])
 
 
   $scope.delete = function(index){
+    // client side
     $scope.shoppingList.list.splice(index, 1);
+
+    // server side
     $scope.listLoading = true;
-    $scope.shoppingList.update($scope.shoppingList.list).then(function(data){
-      $scope.shoppingList.list = data;
-      $scope.listLoading = false;
-    });
+    $scope.shoppingList.delete(index)
+      .then(function(data){
+        $scope.shoppingList.list = data;
+        $scope.listLoading = false;
+      });
     
   }
 
   
   $scope.add = function(newItem) {
+    // client side
     $scope.shoppingList.list.push(newItem);
+
+    // server side
     $scope.listLoading = true;
-    $scope.shoppingList.update($scope.shoppingList.list).then(function(data){
-      $scope.shoppingList.list = data;
-      $scope.listLoading = false;
-    });
+    console.log(newItem)
+    $scope.shoppingList.add(newItem)
+      .then(function(data){
+        $scope.shoppingList.list = data;
+        $scope.listLoading = false;
+      });
     $scope.closeModal();
 
   }
 
   
    $scope.toggleCheck = function(index) {
+     // client side
      $scope.shoppingList.list[index].checked = !$scope.shoppingList.list[index].checked;
+
+     // server side
      $scope.listLoading = true;     
-     $scope.shoppingList.update($scope.shoppingList.list).then(function(data){
-      $scope.shoppingList.list = data;
-      $scope.listLoading = false;
-      
-    });
+     $scope.shoppingList.update(index, $scope.shoppingList.list[index])
+      .then(function(data){
+        $scope.shoppingList.list = data;
+        $scope.listLoading = false;
+      });
+
    }
 
 
@@ -162,7 +175,6 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'chart.js'])
     */
    $scope.$on("$ionicView.enter", function(event, data){
     $scope.refresh();
-   
   });
   
 })
