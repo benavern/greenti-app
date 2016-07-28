@@ -64,7 +64,7 @@ class Router {
         
     }//function
 
-    public function error($message = "unknown error"){        
+    public function error($message = "unknown error"){
         header("HTTP/1.0 500 Internal Server Error");
         header('Content-Type: application/json');
         echo json_encode(["error" => $message]);
@@ -127,11 +127,11 @@ $router->post('/cart/delete', function($options) {
 
     $toDelete = $options['POST'];
 
-    if(!empty($toDelete['item'])){
+    if(isset($toDelete['item'])){
         output(deleteListContent($toDelete['item']));
     }
     else{
-        error("You must pass the item's index to be delete it.");
+        error("You must pass the item's index to delete it.");
     }
 });
 
@@ -142,7 +142,7 @@ $router->post('/cart/update', function($options) {
     $data = $options['POST'];
     $index = $options['GET']['item'];
 
-    if(!empty($data['title']) && !empty($data['code']) && !empty($index)){
+    if(!empty($data['title']) && !empty($data['code']) && isset($index)){
         $toUpdate['title'] = $data['title'];
         $toUpdate['code'] = $data['code'];
         $toUpdate['checked'] = ($data['checked'] == true) ? true : false;
@@ -180,7 +180,7 @@ function getListContent($index = NULL) {
 
 
 function addListContent($toAdd = NULL){
-    if($toAdd == NULL) error("You must pass the item's data to add it.");
+    if($toAdd === NULL) error("You must pass the item's data to add it.");
 
     $data = getListContent();
 
@@ -193,7 +193,7 @@ function addListContent($toAdd = NULL){
 }
 
 function deleteListContent($index = NULL) {
-    if($index == NULL) error("You must pass the item's index to be delete it.");
+    if($index === NULL) error("You must pass the item's index to delete it.");
 
     $data = getListContent();
 
@@ -207,8 +207,8 @@ function deleteListContent($index = NULL) {
 }
 
 function updateListContent($index = NULL, $toUpdate = NULL){
-    if($toUpdate == NULL) error("You must pass the item's data to update it.");
-    if($index == NULL) error("You must pass the item's index to update it.");
+    if($toUpdate === NULL) error("You must pass the item's data to update it.");
+    if($index === NULL) error("You must pass the item's index to update it.");
 
     $data = getListContent();
 
