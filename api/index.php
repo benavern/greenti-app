@@ -61,10 +61,10 @@ class Router {
         }
 
         $this->routes[$method][$url]($options);
-        
+
     }//function
 
-    public function error($message = "unknown error"){
+    public function error($message = "unknown error"){        
         header("HTTP/1.0 500 Internal Server Error");
         header('Content-Type: application/json');
         echo json_encode(["error" => $message]);
@@ -178,7 +178,6 @@ function getListContent($index = NULL) {
     else error("The item you requested doesn't exist");
 }
 
-
 function addListContent($toAdd = NULL){
     if($toAdd === NULL) error("You must pass the item's data to add it.");
 
@@ -186,10 +185,7 @@ function addListContent($toAdd = NULL){
 
     $data[] = $toAdd;
 
-    writeFile(json_encode($data));
-
-    return $data;
-
+    return writeFile($data);
 }
 
 function deleteListContent($index = NULL) {
@@ -199,11 +195,9 @@ function deleteListContent($index = NULL) {
 
     if(!isset($data[intVal($index)])) error("The item you want to delete does not exist");
     unset($data[intVal($index)]);
+    $newData  = array_values($data); 
 
-    writeFile(json_encode($data));
-    
-    return $data;
-
+    return writeFile($newData);
 }
 
 function updateListContent($index = NULL, $toUpdate = NULL){
@@ -212,20 +206,13 @@ function updateListContent($index = NULL, $toUpdate = NULL){
 
     $data = getListContent();
 
-    if(!isset($data[intVal($index)])) error("The item you want to update does not exist");
-
-    $data = getListContent();
+    if(!isset($data[intVal($index)])) error("The item you want to update does not exist");	
 
     $data[intVal($index)] = $toUpdate;
+    $newData  = array_values($data);	
 
-    writeFile(json_encode($data));
-
-    return $data;
+    return writeFile($newData);
 }
-
-
-
-
 
 function output($data = []) {
     header('Content-Type: application/json');
@@ -240,10 +227,12 @@ function error($message = "unknown error"){
     exit(0);
 }
 
-function writeFile($data = "") {
+function writeFile($data = []) {
+    $toWrite = json_encode($data);
+
     $listPath = './list.json';
     $myfile = fopen($listPath, "w") or error("Error while writing in the file...");
-    fwrite($myfile, $data);
+    fwrite($myfile, $toWrite);
     fclose($myfile);
     return $data;
 }
