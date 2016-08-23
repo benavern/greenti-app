@@ -2,11 +2,9 @@
 # http://git-scm.com/docs/gitignore
 
 node_modules/
-platforms/
+#platforms/
 plugins/
 www/lib/
-
-!platforms\android\build\outputs\apk\android-debug.apk
 
 Thumbs.db
 
