@@ -6,4 +6,7 @@ platforms/
 plugins/
 www/lib/
 
+!platforms\android\build\outputs\apk\android-debug.apk
+
 Thumbs.db
+
