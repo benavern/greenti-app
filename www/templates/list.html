@@ -26,8 +26,8 @@
     <script id="templates/modal.html" type="text/ng-template">
       <ion-modal-view>
         <ion-header-bar class="bar bar-header bar-balanced">
-          <h1 class="title">New Contact</h1>
-          <button class="button button-clear button-primary" ng-click="modal.hide()">Cancel</button>
+          <h1 class="title">Nouvel article</h1>
+          <button class="button button-clear button-primary" ng-click="modal.hide()">Annuler</button>
         </ion-header-bar>
         <ion-content class="padding">
           <div class="list">
@@ -39,7 +39,7 @@
               <span class="input-label">Code barre</span>
               <input ng-model="newItem.code" type="tel">
             </label>
-            <button class="button button-full button-balanced" ng-click="newItem.checked = false; add(newItem)">Create</button>
+            <button class="button button-full button-balanced" ng-click="newItem.checked = false; add(newItem)">Ajouter</button>
           </div>
         </ion-content>
       </ion-modal-view>
