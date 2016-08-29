@@ -43,21 +43,21 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'chart.js'])
   };
 
  $scope.shareBtn = function(x) {
-   $ionicActionSheet.show({
-     titleText: 'Partager via...' ,
-     buttons: [
-        { text: '<i class="icon ion-social-facebook positive"></i> Facebook'},
-        { text: '<i class="icon ion-social-twitter calm"></i> Twitter' },
-      ],
-     cancelText: 'Annuler',
-     cancel: function() {
-        console.log('CANCELLED');
-      },
-     buttonClicked: function(i) {
+  //  $ionicActionSheet.show({
+  //    titleText: 'Partager via...' ,
+  //    buttons: [
+  //       { text: '<i class="icon ion-social-facebook positive"></i> Facebook'},
+  //       { text: '<i class="icon ion-social-twitter calm"></i> Twitter' },
+  //     ],
+  //    cancelText: 'Annuler',
+  //    cancel: function() {
+  //       console.log('CANCELLED');
+  //     },
+  //    buttonClicked: function(i) {
        $scope.showAlert(x);
-       return true;
-     }
-   });
+  //      return true;
+  //    }
+  //  });
 
  };
 
